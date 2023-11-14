@@ -1,23 +1,37 @@
-import logo from './logo.svg';
+import { useRef, useState } from "react";
 import './App.css';
 
-function App() {
+function App() 
+{
+  const [task, setTask] = useState([]);
+  const inputRef = useRef(null);
+
+  const addItem = (item) => 
+  {
+    const newItem = inputRef.current.value;
+    if (newItem !== "")
+      setTask([...task, newItem]);
+    inputRef.current.value = "";
+  }
+
+  const removeItem = (index) =>
+  {
+    const updatedTasks = task.filter((_, i) => i !== index);
+    setTask(updatedTasks);
+  }
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          BRUUHHHHHHHHHHH <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1>ToDo List</h1>
+      <input type="text" placeholder="Enter an item" ref={inputRef} />
+      <ul>
+          {task.map((todo, i) => (
+            <li className="li-item" key={i}> {todo}
+              <span onClick={() => removeItem(i)}>X</span>
+            </li>
+          ))}
+      </ul>
+      <button class="custom-btn" onClick={addItem}>Add</button>
     </div>
   );
 }
